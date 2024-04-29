@@ -1,6 +1,6 @@
 import jwt, { Secret, JwtPayload } from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
-import UserService from '../services/users/user';
+import axios from 'axios';
 require('dotenv').config();
 
 if (!process.env.SECRET_KEY) {
@@ -9,10 +9,9 @@ if (!process.env.SECRET_KEY) {
 
 export const SECRET_KEY: Secret = process.env.SECRET_KEY;
 export interface CustomRequest extends Request {
-  user: any;
+  userId: string;
 }
 
-const userService = new UserService();
 
 export const auth = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -24,15 +23,20 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
 
     const decoded = jwt.verify(token, SECRET_KEY) as JwtPayload;
     console.log(decoded.id)
-    const userData = await userService.getById(decoded.id);
+    const userData = await axios.post('http://localhost:8001/v1/users/user', {
+      id: decoded.id
+    });
 
-    if (!userData) {
+
+    if (!userData.data) { // Sửa thành userData.data
       throw new Error('User not found');
     }
 
-    (req as CustomRequest).user = userData;
+    (req as CustomRequest).userId = userData.data.id;
     next();
   } catch (err) {
+    console.error('Authentication error:', err); // Log lỗi để debug
     res.status(401).send('Please authenticate');
   }
 };
+

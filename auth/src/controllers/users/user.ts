@@ -15,6 +15,17 @@ export default class UserController {
         }
     }
 
+    getUserById = async (request: any, response: any) => {
+        try {
+            const { id } = request.body;
+            // console.log("controller id", id)
+            const user: any = await this.userService.getById(id)
+            response.status(201).send(user)
+        } catch (error: any) {
+            response.status(404).send(getErrorMessage(error))
+        }
+    }
+
     updateActivities = async (request: any, response: any) => {
         const { activities } = request.body;
         const userId = request.user.id;

@@ -23,7 +23,7 @@ export default class App {
     }
     private createApp(): express.Application {
         const app = express()
-        app.use(cors())
+        app.use(cors());
         app.use(bodyParser.json())
         app.use('/v1', routes)
     

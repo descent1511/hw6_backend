@@ -29,9 +29,7 @@ class TripService {
 
     async getAll(): Promise<Trip[]> {
         try {
-            const trips = await Trip.findAll({
-                include: [{ association: 'locations' }]
-            });
+            const trips = await Trip.findAll();
             return trips;
         } catch (error) {
             throw error;

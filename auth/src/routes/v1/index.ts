@@ -7,6 +7,6 @@ import {auth} from "../../middlewares/auth"
 const router: express.Router = express.Router()
 
 router.use('/auth', authRoutes)
-router.use('/users', auth, userRoutes)
+router.use('/users', userRoutes)
 
 export default router

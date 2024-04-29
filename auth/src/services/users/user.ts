@@ -1,9 +1,11 @@
 import User from '../../models/users/user'
 import { Op } from 'sequelize';
 class UserService {
-    async getById(id: number): Promise<User> {
+    async getById(id: string): Promise<User> {
         try {
+            console.log("user id 3", id)
             const user = await User.findByPk(id)
+
             if (!user) 
                 throw new Error('Not Found');
             return user
