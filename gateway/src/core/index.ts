@@ -1,7 +1,6 @@
 import express from "express"
 import { createServer, Server } from "http"
-import sequelize from "../providers/db"
-import { Sequelize } from 'sequelize-typescript'
+
 import bodyParser from "body-parser"
 import cors from "cors";
 import routes from "../routes/v1/index"
@@ -12,20 +11,18 @@ export default class App {
   
     private app: express.Application
     private server: Server
-    private sequelize: Sequelize
-    constructor(port = 8001, host = "localhost") {
+    constructor(port = 8000, host = "localhost") {
         this.port = Number(process.env.PORT) || port
         this.host = process.env.HOST || host
     
         this.app = this.createApp()
-        this.server = this.createServer()
-        this.sequelize = sequelize    
+        this.server = this.createServer() 
     }
     private createApp(): express.Application {
         const app = express()
         app.use(cors())
         app.use(bodyParser.json())
-        app.use('/v1', routes)
+        app.use(routes)
     
         return app
       }

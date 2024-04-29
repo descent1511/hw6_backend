@@ -13,7 +13,7 @@ export default class App {
     private app: express.Application
     private server: Server
     private sequelize: Sequelize
-    constructor(port = 8001, host = "localhost") {
+    constructor(port = 8002, host = "localhost") {
         this.port = Number(process.env.PORT) || port
         this.host = process.env.HOST || host
     

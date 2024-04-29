@@ -25,6 +25,7 @@ export default class UserController {
             response.status(400).send(getErrorMessage(error))
         }
     }
+    
     delete = async (request: any, response: any) => {
         const userId = request.user.id;
         try {
