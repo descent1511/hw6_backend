@@ -38,8 +38,8 @@ export default class TripController {
 
     update = async (request: any, response: any) => {
         const { body } = request;
-        const userId = request.user.id;
-        const tripId = request.params.trip_id;
+        const tripId = body.trip_id;
+        const userId = request.userId;
 
         try {
             const updatedTrip: any = await this.tripService.update(tripId, { ...body, userId: userId })
@@ -64,7 +64,8 @@ export default class TripController {
 
     delete = async (request: any, response: any) => {
         try {
-            const tripId = request.params.id;
+            const { body } = request;
+            const tripId = body.trip_id;
             const deletedReview: any = await this.tripService.delete(tripId)
             
             response.status(201).send('Trip has been successfully deleted')

@@ -4,6 +4,6 @@ import tripRoutes from "./trips/trip"
 const router: express.Router = express.Router()
 
 
-router.use('/trips', tripRoutes)
+router.use(tripRoutes)
 
 export default router
