@@ -33,10 +33,10 @@ export class Location extends Model<LocationAttributes, LocationCreationAttribut
   })
   rating: number;
 
-  @Column
-  activities: any[];
+  @Column({
+    type: DataType.ARRAY(DataType.STRING), // Define the data type for activities
+  })
+  activities: string[]; // Assuming activities is an array of strings
 }
-
-
 
 export default Location;
