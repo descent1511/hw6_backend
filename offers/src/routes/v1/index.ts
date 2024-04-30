@@ -1,11 +1,13 @@
 import express from "express"
-import locationRoutes from "./locations/locations"
+
+import offerRoutes from "./offers/offer"
 
 
 import {auth} from "../../middlewares/auth"
 
 const router: express.Router = express.Router()
 
-router.use(auth, locationRoutes)
+router.use(auth, offerRoutes)
+
 
 export default router

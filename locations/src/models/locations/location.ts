@@ -5,6 +5,7 @@ export interface LocationAttributes {
   name: string;
   address: string;
   rating: number;
+  activities : any;
 }
 
 export type LocationCreationAttributes = Optional<LocationAttributes, 'id'>;
@@ -32,6 +33,8 @@ export class Location extends Model<LocationAttributes, LocationCreationAttribut
   })
   rating: number;
 
+  @Column
+  activities: any[];
 }
 
 
