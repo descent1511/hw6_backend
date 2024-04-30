@@ -25,7 +25,7 @@ class TripLocationService {
 
     async getAllByTripId(tripId: string): Promise<TripLocation[]> {
         try {
-            const tripLocations = await TripLocation.findAll({ where: { tripId} });
+            const tripLocations = await TripLocation.findAll({ where: { tripId } });
             return tripLocations;
         } catch (error) {
             throw error;
