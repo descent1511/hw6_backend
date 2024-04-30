@@ -9,6 +9,7 @@ router.use('/trips', proxy('http://localhost:8002'));
 router.use('/activities', proxy('http://localhost:8003'));
 router.use('/users-activities', proxy('http://localhost:8004'));
 router.use('/locations', proxy('http://localhost:8006'));
-
-
+router.use('/locations-activities', proxy('http://localhost:8007'));
+router.use('/trips-locations', proxy('http://localhost:8008'));
+router.use('/offers', proxy('http://localhost:8009'));
 export default router;
