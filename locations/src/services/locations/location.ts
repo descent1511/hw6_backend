@@ -1,6 +1,6 @@
 import { Op } from 'sequelize';
 import { Location } from '../../models/locations/location';
-
+import axios from 'axios';
 class LocationService {
 
     async create(locationData: any): Promise<Location> {
@@ -40,6 +40,56 @@ class LocationService {
             throw error;
         }
     }
+
+    async getLocationForUser(token : string): Promise<Location[]> {
+        try {
+            const response = await axios.get('http://localhost:8000/users-activities/v1/all-user-activity',  {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            const activities = response.data
+            if (!activities || activities.length === 0) {
+                return [];
+            }
+            const activityIds = activities.map((activity: { activityId: string; }) => activity.activityId);
+    
+            const locationSet: Set<string> = new Set();
+            console.log(activityIds)
+            const locationPromises = activityIds.map(async (activityId: string) => {
+                try {
+                    const response = await axios.post('http://localhost:8000/locations-activities/v1/activity', {
+                        activityId: activityId
+                    }, {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    });
+                    const locationsWithActivity = response.data;
+                    locationsWithActivity.forEach((location: { locationId: string; }) => {
+                        locationSet.add(location.locationId);
+                    });
+                } catch (error) {
+                    console.error(`Error fetching locations for activityId ${activityId}:`, error);
+                }
+            });
+    
+            await Promise.all(locationPromises);
+    
+            const locationIds: string[] = [...locationSet];
+            const locations = await Location.findAll({
+                where: {
+                    id: locationIds 
+                }
+            });
+            
+            
+            return locations;
+        } catch (error) {
+            throw error;
+        }
+    }
+
 
     async update(id: number, locationData: any): Promise<Location> {
         try {
