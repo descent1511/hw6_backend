@@ -1,12 +1,12 @@
 import { Sequelize } from 'sequelize-typescript';
-import { Trip } from '../../models/trips/trip';
+import { Trip, TripCreationAttributes } from '../../models/trips/trip';
 import { Op } from 'sequelize';
 
 class TripService {
 
-    async create(tripData: any): Promise<Trip> {
+    async create(tripData: TripCreationAttributes): Promise<Trip> {
         try {
-            const trip = await Trip.create(tripData);
+            const trip: Trip = await Trip.create(tripData);
             console.log("tripData: ", tripData)
             return trip;
         } catch (error) {
@@ -29,7 +29,7 @@ class TripService {
 
     async getAll(): Promise<Trip[]> {
         try {
-            const trips = await Trip.findAll();
+            const trips: Trip[] = await Trip.findAll();
             return trips;
         } catch (error) {
             throw error;
@@ -39,7 +39,7 @@ class TripService {
     
     async update(id: string, tripData: any): Promise<Trip> {
         try {
-            const [, updatedRowsCount]: [any, any] = await Trip.update(tripData, {
+            const [updatedRowsCount, updatedTrips]: [number, Trip[]] = await Trip.update(tripData, {
                 where: { id, userId: tripData.userId },
                 returning: true,
             });

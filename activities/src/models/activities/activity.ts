@@ -9,8 +9,6 @@ export interface ActivityAttributes {
 }
 
 
-
-
 export type ActivityCreationAttributes = Optional<ActivityAttributes, 'id'>;
 
 @Table

@@ -1,6 +1,7 @@
 import LocationActivityService from '../../services/locations-activities/location_activity';
 import { getErrorMessage } from '../../utils/getErrorMessage';
 import { LocationActivity } from '../../models/locations-activities/locations_activities';
+import { Request, Response } from 'express';
 
 export default class LocationActivityController {
     private locationActivityService: LocationActivityService
@@ -9,7 +10,7 @@ export default class LocationActivityController {
         this.locationActivityService = new LocationActivityService()
     }
 
-    createLocationActivity = async (request: any, response: any) => {
+    createLocationActivity = async (request: Request, response: Response) => {
         try {
             const { body } = request;
             const data: LocationActivity = await this.locationActivityService.create(body)
@@ -19,7 +20,7 @@ export default class LocationActivityController {
         }
     }
 
-    getAllByActivityId = async (request: any, response: any) => {
+    getAllByActivityId = async (request: Request, response: Response) => {
         try {
             const { activityId } = request.body;
            
@@ -30,7 +31,7 @@ export default class LocationActivityController {
         }
     }
 
-    getAllByLocationId = async (request: any, response: any) => {
+    getAllByLocationId = async (request: Request, response: Response) => {
         try {
             const { locationId } = request.body;
             const data: LocationActivity[] = await this.locationActivityService.getAllByLocationId(locationId);
@@ -40,7 +41,7 @@ export default class LocationActivityController {
         }
     }
 
-    getById = async (request: any, response: any) => {
+    getById = async (request: Request, response: Response) => {
         try {
             const { id } = request.body;
           
@@ -51,7 +52,7 @@ export default class LocationActivityController {
         }
     }
 
-    delete = async (request: any, response: any) => {
+    delete = async (request: Request, response: Response) => {
         try {
             const { body } = request;
             // console.log(body)

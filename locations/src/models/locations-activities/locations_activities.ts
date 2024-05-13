@@ -7,7 +7,6 @@ export interface LocationActivityAttributes {
   locationId: string;
 }
 
-
 export type LocationActivityCreationAttributes = Optional<LocationActivityAttributes, 'id'>;
 
 @Table

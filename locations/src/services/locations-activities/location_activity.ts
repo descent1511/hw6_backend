@@ -2,7 +2,7 @@ import { LocationActivity } from '../../models/locations-activities/locations_ac
 
 class LocationActivityService {
 
-    async create(data: any): Promise<LocationActivity> {
+    async create(data: LocationActivity): Promise<LocationActivity> {
         try {
             const locationActivity = await LocationActivity.create(data);
             return locationActivity;

@@ -1,4 +1,4 @@
-import {Activity} from '../../models/activities/activity'
+import { Activity, ActivityAttributes } from '../../models/activities/activity'
 class ActivityService {
 
     async create(activityData: Activity): Promise<Activity> {
