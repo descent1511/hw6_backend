@@ -5,7 +5,7 @@ export interface LocationAttributes {
   name: string;
   address: string;
   rating: number;
-  activities : any;
+  activities : string[];
 }
 
 export type LocationCreationAttributes = Optional<LocationAttributes, 'id'>;

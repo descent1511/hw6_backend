@@ -1,9 +1,9 @@
 import { Op } from 'sequelize';
-import { Location } from '../../models/locations/location';
+import { Location, LocationAttributes } from '../../models/locations/location';
 import axios from 'axios';
 class LocationService {
 
-    async create(locationData: any): Promise<Location> {
+    async create(locationData: LocationAttributes): Promise<Location> {
         try {
             const location = await Location.create(locationData);
             return location;

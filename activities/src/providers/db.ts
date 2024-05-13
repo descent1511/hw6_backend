@@ -1,5 +1,5 @@
 import { Sequelize } from 'sequelize-typescript'
-
+import { UserActivity } from '../models/users-activities/user_activity';
 import { Activity } from '../models/activities/activity'
 
 require('dotenv').config();
@@ -13,7 +13,8 @@ const sequelize = new Sequelize({
 })
 
 const models = [
-    Activity, 
+    Activity,
+    UserActivity 
 ]
 
 sequelize.addModels(models)

@@ -1,6 +1,9 @@
 import Offer from '../../models/offers/offer';
 import OfferService from '../../services/offers/offer'
 import { getErrorMessage } from '../../utils/getErrorMessage';
+import Offer from '../../models/offers/offer';
+import { Request, Response } from 'express';
+
 export default class OfferController {
     private offerService: OfferService
 
@@ -8,31 +11,31 @@ export default class OfferController {
         this.offerService = new OfferService()
     }
 
-    create = async (request: any, response: any) => {
+    create = async (request: Request, response: Response) => {
         try {
             const { body } = request;
-            const offer: any = await this.offerService.create(body)
+            const offer: Offer = await this.offerService.create(body)
             response.status(201).send(offer)
         } catch (error: any) {
             response.status(404).send(getErrorMessage(error))
         }
     }
 
-    getAll = async (request: any, response: any) => {
+    getAll = async (request: Request, response: Response) => {
         console.log("getAll");
         try {
             const { type, max_price } = request.body;
             // console.log(type, max_price)
-            const offers: any = await this.offerService.getAll(type, max_price)
+            const offers: Offer[] = await this.offerService.getAll(type, max_price)
             response.status(201).send(offers)
         } catch (error: any) {
             response.status(404).send(getErrorMessage(error))
         }
     }
-    getById = async (request: any, response: any) => {
+    getById = async (request: Request, response: Response) => {
         try {
             const { body } = request;
-            const offer: any = await this.offerService.getById(body.id);
+            const offer: Offer = await this.offerService.getById(body.id);
             response.status(201).send(offer);
         } catch (error: any) {
             response.status(404).send(getErrorMessage(error));
@@ -53,10 +56,10 @@ export default class OfferController {
         }
     }
 
-    delete = async (request: any, response: any) => {
+    delete = async (request: Request, response: Response) => {
         try {
             const { body } = request;
-            const deletedOffer: any = await this.offerService.delete(body.id)
+            const deletedOffer: number = await this.offerService.delete(body.id)
             
             response.status(201).send('Offer has been successfully deleted')
         } catch (error: any) {
@@ -64,13 +67,13 @@ export default class OfferController {
         }
     }
 
-    update = async (request: any, response: any) => {
+    update = async (request: Request, response: Response) => {
         const { body } = request;
         const userId = request.user.id;
         const offerId = request.params.trip_id;
 
         try {
-            const updatedOffer: any = await this.offerService.update(offerId, { ...body, userId: userId })
+            const updatedOffer: Offer = await this.offerService.update(offerId, { ...body, userId: userId })
             response.status(201).send(updatedOffer)
         } catch (error: any) {
             response.status(400).send(getErrorMessage(error))

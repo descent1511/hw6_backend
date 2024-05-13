@@ -1,5 +1,8 @@
 import ReviewService from '../../services/reviews/review'
 import { getErrorMessage } from '../../utils/getErrorMessage';
+import Review from '../../models/reviews/review';
+import { Request, Response } from 'express';
+
 export default class ReviewController {
     private reviewService: ReviewService
 
@@ -7,21 +10,21 @@ export default class ReviewController {
         this.reviewService = new ReviewService()
     }
 
-    create = async (request: any, response: any) => {
+    create = async (request: any, response: Response) => {
         try {
             const { body } = request;
             console.log(body);
             const userId = request.userId;
-            const review: any = await this.reviewService.create({ ...body, userId: userId });
+            const review: Review = await this.reviewService.create({ ...body, userId: userId });
             response.status(201).send(review)
         } catch (error: any) {
             response.status(404).send(getErrorMessage(error))
         }
     }
 
-    getAll = async (request: any, response: any) => {
+    getAll = async (request: Request, response: Response) => {
         try {
-            const reviews: any = await this.reviewService.getAll()
+            const reviews: Review[] = await this.reviewService.getAll()
             response.status(201).send(reviews)
         } catch (error: any) {
             response.status(404).send(getErrorMessage(error))
@@ -33,27 +36,27 @@ export default class ReviewController {
         const reviewId = request.params.review_id;
 
         try {
-            const updatedReview: any = await this.reviewService.update(reviewId, { ...body, userId: userId })
+            const updatedReview: Review = await this.reviewService.update(reviewId, { ...body, userId: userId })
             response.status(201).send(updatedReview)
         } catch (error: any) {
             response.status(400).send(getErrorMessage(error))
         }
     }
     
-    getById = async (request: any, response: any) => {
+    getById = async (request: Request, response: Response) => {
         try {
             const { reviewId } = request.body;
-            const review: any = await this.reviewService.getById(reviewId);
+            const review: Review = await this.reviewService.getById(reviewId);
             response.status(201).send(review)
         } catch (error: any) {
             response.status(404).send(getErrorMessage(error))
         }
     }
 
-    delete = async (request: any, response: any) => {
+    delete = async (request: Request, response: Response) => {
         try {
             const { id } = request.body;
-            const deletedReview: any = await this.reviewService.delete(id)
+            const deletedReview: number = await this.reviewService.delete(id)
             
             response.status(201).send('Review has been successfully deleted')
         } catch (error: any) {

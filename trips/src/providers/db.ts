@@ -1,6 +1,7 @@
 import { Sequelize } from 'sequelize-typescript'
+import { TripLocation } from '../models/trips-locations/trip_location';
 
-import {Trip} from '../models/trips/trip'
+import { Trip } from '../models/trips/trip'
 
 require('dotenv').config();
 
@@ -14,6 +15,7 @@ const sequelize = new Sequelize({
 
 const models = [
     Trip,
+    TripLocation
 ]
 
 sequelize.addModels(models)

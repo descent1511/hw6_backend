@@ -1,6 +1,7 @@
 import { Sequelize } from 'sequelize-typescript'
-
+import { LocationActivity } from '../models/locations-activities/locations_activities';
 import Location from "../models/locations/location"
+
 
 require('dotenv').config();
 
@@ -14,6 +15,7 @@ const sequelize = new Sequelize({
 
 const models = [
     Location,
+    LocationActivity
 ]
 
 sequelize.addModels(models)
