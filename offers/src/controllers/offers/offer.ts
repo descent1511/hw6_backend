@@ -42,18 +42,19 @@ export default class OfferController {
         }
     }
 
-    // getOfferForUser = async (request: any, response: any) => {
-    //     try {
-    //         const user_id = request.user.id;
-    //         const { type, max_price } = request.body; 
-  
-    //         const offers: any = await this.offerService.getOfferForUser(user_id, type, max_price);
+    getOfferForUser = async (request: any, response: any) => {
+        try {
+           
+            const token = request.token
+            const { type, max_price } = request.body; 
+           
+            const offers: any = await this.offerService.getOfferForUser(token , type, max_price);
     
-    //         response.status(200).send(offers);
-    //     } catch (error: any) {
-    //         response.status(404).send(getErrorMessage(error));
-    //     }
-    // }
+            response.status(200).send(offers);
+        } catch (error: any) {
+            response.status(404).send(getErrorMessage(error));
+        }
+    }
 
     delete = async (request: Request, response: Response) => {
         try {

@@ -6,7 +6,7 @@ const controller: OfferController = new OfferController();
 
 router.post('/', controller.create);
 router.get('/', controller.getAll);
-// router.get('/me', controller.getOfferForUser);
+router.get('/me', controller.getOfferForUser);
 router.get('/id', controller.getById);
 router.delete('/', controller.delete);
 

@@ -10,6 +10,7 @@ if (!process.env.SECRET_KEY) {
 export const SECRET_KEY: Secret = process.env.SECRET_KEY;
 export interface CustomRequest extends Request {
   userId: string;
+  token : string; 
 }
 
 
@@ -33,6 +34,7 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
     }
 
     (req as CustomRequest).userId = userData.data.id;
+    (req as CustomRequest).token = token;
     next();
   } catch (err) {
     console.error('Authentication error:', err);

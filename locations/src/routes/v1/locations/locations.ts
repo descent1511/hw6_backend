@@ -7,6 +7,7 @@ const controller: LocationController = new LocationController();
 
 router.post('/create-location', auth, controller.create);
 router.get('/', auth, controller.getAll);
+router.get('/me', auth, controller.getLocationForUser);
 router.get('/location', controller.getById);
 router.delete('/delete-location', auth, controller.delete);
 router.put('/update-location', controller.update);

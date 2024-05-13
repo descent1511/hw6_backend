@@ -1,6 +1,7 @@
 import { Offer } from '../../models/offers/offer';
 import { Op } from 'sequelize';
 import axios from 'axios';
+import { request } from 'http';
 class OfferService {
 
     async create(offerData: any): Promise<Offer> {
@@ -26,7 +27,7 @@ class OfferService {
     async getAll(type?: string, price?: number): Promise<Offer[]> {
         try {
             let whereCondition: any = {};
-            console.log(type, price)
+           
             if (type) {
                 whereCondition.type = type;
             }
@@ -45,40 +46,45 @@ class OfferService {
         }
     }
 
-    async getOfferForUser(userId: string, type?: string, price?: number): Promise<Offer[]> {
+    async getOfferForUser(token : string, type?: string, price?: number): Promise<Offer[]> {
         try {
-            const response = await axios.post('http://localhost:8000/users-activities/v1/all-user-activity', {
-                userId: userId
+            const response = await axios.get('http://localhost:8000/users-activities/v1/all-user-activity',  {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
             });
             const activities = response.data
             if (!activities || activities.length === 0) {
                 return [];
             }
             const activityIds = activities.map((activity: { activityId: string; }) => activity.activityId);
-
+    
             const locationSet: Set<string> = new Set();
-
+            console.log(activityIds)
             const locationPromises = activityIds.map(async (activityId: string) => {
                 try {
                     const response = await axios.post('http://localhost:8000/locations-activities/v1/activity', {
                         activityId: activityId
+                    }, {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
                     });
                     const locationsWithActivity = response.data;
-                    locationsWithActivity.forEach((location: { location_id: string; }) => {
-                        locationSet.add(location.location_id);
+                    locationsWithActivity.forEach((location: { locationId: string; }) => {
+                        locationSet.add(location.locationId);
                     });
                 } catch (error) {
                     console.error(`Error fetching locations for activityId ${activityId}:`, error);
                 }
             });
-
+    
             await Promise.all(locationPromises);
-
-
+    
             const locationIds: string[] = [...locationSet];
-
+    
             const offerPromises: Promise<Offer[]>[] = [];
-
+    
             locationIds.forEach(locationId => {
                 let whereCondition: any = { locationId: locationId };
                 if (type) {
@@ -87,20 +93,20 @@ class OfferService {
                 if (price) {
                     whereCondition.price = { [Op.lte]: price };
                 }
-
+    
                 const offerPromise = Offer.findAll({ where: whereCondition });
                 offerPromises.push(offerPromise);
             });
-
+    
             const allOffers = await Promise.all(offerPromises);
-
+    
             const flattenedOffers = allOffers.flat();
             return flattenedOffers;
         } catch (error) {
             throw error;
         }
     }
-
+    
 
     async update(id: number, offerData: any): Promise<Offer> {
         try {

@@ -19,8 +19,19 @@ export default class LocationController {
             response.status(404).send(getErrorMessage(error))
         }
     }
-
-    getAll = async (request: Request, response: Response) => {
+    getLocationForUser = async (request: any, response: any) => {
+        try {
+           
+            const token = request.token
+           
+            const locations: any = await this.locationService.getLocationForUser(token);
+    
+            response.status(200).send(locations);
+        } catch (error: any) {
+            response.status(404).send(getErrorMessage(error));
+        }
+    }
+    getAll = async (request: any, response: any) => {
         try {
 
             const { min_rating } = request.body;
