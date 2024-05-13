@@ -1,9 +1,9 @@
 import { Op } from 'sequelize';
-import { Location } from '../../models/locations/location';
+import { Location, LocationAttributes } from '../../models/locations/location';
 
 class LocationService {
 
-    async create(locationData: any): Promise<Location> {
+    async create(locationData: LocationAttributes): Promise<Location> {
         try {
             const location = await Location.create(locationData);
             return location;
@@ -41,7 +41,7 @@ class LocationService {
         }
     }
 
-    async update(id: number, locationData: any): Promise<Location> {
+    async update(id: number, locationData: LocationAttributes): Promise<Location> {
         try {
             const [, updatedRowsCount]: [any, any] = await Location.update(locationData, {
                 where: { id },

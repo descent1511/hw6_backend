@@ -1,6 +1,8 @@
 import { Trip } from '../../models/trips/trip';
 import TripService from '../../services/trips/trip';
 import { getErrorMessage } from '../../utils/getErrorMessage';
+import { Request, Response } from 'express';
+
 export default class TripController {
     private tripService: TripService;
 
@@ -8,7 +10,7 @@ export default class TripController {
         this.tripService = new TripService();
     }
 
-    create = async (request: any, response: any) => {
+    create = async (request: Request, response: Response) => {
         console.log(request.body);
         const dateStartString = request.body.dateStart;
         const dateEndString = request.body.dateEnd;
@@ -19,16 +21,16 @@ export default class TripController {
         try {
             const { body } = request;
             //const userId = request.user.id;
-            const trip: any = await this.tripService.create({ ...body, dateStart: dateStart, dateEnd: dateEnd });
+            const trip: Trip = await this.tripService.create({ ...body, dateStart: dateStart, dateEnd: dateEnd });
             response.status(201).send(trip)
         } catch (error: any) {
             response.status(404).send(getErrorMessage(error))
         }
     }
 
-    getAll = async (request: any, response: any) => {
+    getAll = async (request: Request, response: Response) => {
         try {
-            const trips: any = await this.tripService.getAll()
+            const trips: Trip[] = await this.tripService.getAll()
             
             response.status(201).send(trips)
         } catch (error: any) {
@@ -36,24 +38,24 @@ export default class TripController {
         }
     }
 
-    update = async (request: any, response: any) => {
+    update = async (request: any, response: Response) => {
         const { body } = request;
         const tripId = body.trip_id;
         const userId = request.userId;
 
         try {
-            const updatedTrip: any = await this.tripService.update(tripId, { ...body, userId: userId })
+            const updatedTrip: Trip = await this.tripService.update(tripId, { ...body, userId: userId })
             response.status(201).send(updatedTrip)
         } catch (error: any) {
             response.status(400).send(getErrorMessage(error))
         }
     }
     
-    getById = async (request: any, response: any) => {
+    getById = async (request: Request, response: Response) => {
         try {
             const { body } = request;
             const tripId = body.trip_id;
-            const trip: any = await this.tripService.getById(tripId);
+            const trip: Trip = await this.tripService.getById(tripId);
 
             response.status(201).send(trip)
         } catch (error: any) {
@@ -62,11 +64,11 @@ export default class TripController {
     }
 
 
-    delete = async (request: any, response: any) => {
+    delete = async (request: Request, response: Response) => {
         try {
             const { body } = request;
             const tripId = body.trip_id;
-            const deletedReview: any = await this.tripService.delete(tripId)
+            const deletedReview: number = await this.tripService.delete(tripId)
             
             response.status(201).send('Trip has been successfully deleted')
         } catch (error: any) {

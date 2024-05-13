@@ -3,7 +3,6 @@ import { Op } from 'sequelize';
 class UserService {
     async getById(id: string): Promise<User> {
         try {
-            console.log("user id 3", id)
             const user = await User.findByPk(id)
 
             if (!user) 

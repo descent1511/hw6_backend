@@ -1,4 +1,5 @@
 import { Table, Column, Model, DataType, PrimaryKey, ForeignKey, BelongsToMany } from 'sequelize-typescript';
+import { Request, Response } from 'express';
 
 import { Optional } from "sequelize";
 
@@ -6,6 +7,9 @@ export interface ActivityAttributes {
   id: string;
   name: string;
 }
+
+
+
 
 export type ActivityCreationAttributes = Optional<ActivityAttributes, 'id'>;
 

@@ -1,7 +1,7 @@
 import {Activity} from '../../models/activities/activity'
 class ActivityService {
 
-    async create(activityData: any): Promise<Activity> {
+    async create(activityData: Activity): Promise<Activity> {
         try {
             const activity = await Activity.create(activityData)
             return activity
@@ -29,7 +29,7 @@ class ActivityService {
             throw error;
         }
     }
-    async update(id: number, activityData: any): Promise<Activity> {
+    async update(id: number, activityData: Activity): Promise<Activity> {
         try {
             const [updatedRowsCount, updatedActivity] = await Activity.update(activityData, {
                 where: { id },
