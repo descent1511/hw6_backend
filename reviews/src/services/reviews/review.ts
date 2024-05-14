@@ -1,9 +1,9 @@
-import { Review } from '../../models/reviews/review';
+import { Review, ReviewAttributes, ReviewCreationAttributes } from '../../models/reviews/review';
 import axios from 'axios';
 
 class ReviewService {
 
-    async create(reviewData: any): Promise<Review> {
+    async create(reviewData: ReviewCreationAttributes): Promise<Review> {
         try {
             const review = await Review.create(reviewData);
             return review;
@@ -32,46 +32,51 @@ class ReviewService {
         }
     }
 
-    async update(id: string, reviewData: any): Promise<Review> {
+    async update(id: string, reviewData: Partial<ReviewAttributes>): Promise<Review> {
         try {
             // Find the review to be updated
             const review = await Review.findByPk(id);
             if (!review) {
                 throw new Error('Review not found');
             }
-
+    
             // Get the location ID before updating the review
             const locationIdBeforeUpdate = review.location_id;
-
+    
             // Update the review
-            const [, updatedRowsCount]: [any, any] = await Review.update(reviewData, {
-                where: { id, user_id: reviewData.user_id },
+            const [affectedRowsCount, updatedReviews]: [number, Review[]] = await Review.update(reviewData, {
+                where: { id, user_id: reviewData.user_id }, 
                 returning: true,
             });
-
+    
             // Check if the review was updated
-            if (updatedRowsCount === 0) {
+            if (affectedRowsCount === 0) {
                 throw new Error('Review not found');
             }
 
+            const updatedReview = updatedReviews[0];
+            if (!updatedReviews) {
+                throw new Error('Review not found');
+            }
+    
             // Find all reviews associated with the location
             const reviews = await Review.findAll({ where: { location_id: locationIdBeforeUpdate } });
-
+    
             // Calculate the new total rating for the location
             const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
-
+    
             // Calculate the new average rating for the location
             const averageRating = totalRating / reviews.length;
-
+    
             // Round the average rating
             const roundedRating = Math.round(averageRating);
-
+    
             // Update the location's rating
             await axios.put(`http://localhost:8000/locations/v1/update-location`, {
                 id: locationIdBeforeUpdate,
                 rating: roundedRating,
             });
-
+    
             // Return the updated review
             return review;
         } catch (error) {

@@ -1,7 +1,6 @@
 import Offer from '../../models/offers/offer';
 import OfferService from '../../services/offers/offer'
 import { getErrorMessage } from '../../utils/getErrorMessage';
-import Offer from '../../models/offers/offer';
 import { Request, Response } from 'express';
 
 export default class OfferController {
@@ -42,13 +41,13 @@ export default class OfferController {
         }
     }
 
-    getOfferForUser = async (request: any, response: any) => {
+    getOfferForUser = async (request: any, response: Response) => {
         try {
            
             const token = request.token
             const { type, max_price } = request.body; 
            
-            const offers: any = await this.offerService.getOfferForUser(token , type, max_price);
+            const offers: Offer[] = await this.offerService.getOfferForUser(token , type, max_price);
     
             response.status(200).send(offers);
         } catch (error: any) {
@@ -67,7 +66,7 @@ export default class OfferController {
         }
     }
 
-    update = async (request: Request, response: Response) => {
+    update = async (request: any, response: Response) => {
         const { body } = request;
         const userId = request.user.id;
         const offerId = request.params.trip_id;

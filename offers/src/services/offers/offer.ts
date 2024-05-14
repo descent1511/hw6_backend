@@ -1,10 +1,10 @@
-import { Offer } from '../../models/offers/offer';
-import { Op } from 'sequelize';
+import { Offer, OfferAttributes, OfferCreationAttributes } from '../../models/offers/offer';
+import { Op, WhereOptions } from 'sequelize';
 import axios from 'axios';
 import { request } from 'http';
 class OfferService {
 
-    async create(offerData: any): Promise<Offer> {
+    async create(offerData: OfferCreationAttributes): Promise<Offer> {
         try {
             const offer = await Offer.create(offerData);
             return offer;
@@ -26,7 +26,7 @@ class OfferService {
 
     async getAll(type?: string, price?: number): Promise<Offer[]> {
         try {
-            let whereCondition: any = {};
+            let whereCondition: WhereOptions = {};
            
             if (type) {
                 whereCondition.type = type;
@@ -86,7 +86,7 @@ class OfferService {
             const offerPromises: Promise<Offer[]>[] = [];
     
             locationIds.forEach(locationId => {
-                let whereCondition: any = { locationId: locationId };
+                let whereCondition: WhereOptions = { locationId: locationId };
                 if (type) {
                     whereCondition.type = type;
                 }
@@ -108,18 +108,18 @@ class OfferService {
     }
     
 
-    async update(id: number, offerData: any): Promise<Offer> {
+    async update(id: number, offerData: Partial<OfferAttributes>): Promise<Offer> {
         try {
-            const [, updatedRowsCount]: [any, any] = await Offer.update(offerData, {
+            const [affectedRowsCount, updatedOffers]: [number, Offer[]] = await Offer.update(offerData, {
                 where: { id },
                 returning: true,
             });
-
-            if (updatedRowsCount === 0) {
+    
+            if (affectedRowsCount === 0) {
                 throw new Error('Offer not found');
             }
-
-            const updatedOffer = await Offer.findOne({ where: { id } });
+    
+            const updatedOffer = updatedOffers[0];
             if (!updatedOffer) {
                 throw new Error('Updated offer not found');
             }
@@ -128,8 +128,6 @@ class OfferService {
             throw error;
         }
     }
-
-
 
     async delete(id: number): Promise<number> {
         try {

@@ -14,7 +14,7 @@ export default class UserActivityController {
         try {
             const { activityId } = request.body;
             const userId = request.userId;
-            const data: UserActivity = await this.userActivityService.create({activityId, userId})
+            const data: UserActivity = await this.userActivityService.create({ activityId, userId })
             response.status(201).send(data)
         } catch (error: any) {
             response.status(404).send(getErrorMessage(error))

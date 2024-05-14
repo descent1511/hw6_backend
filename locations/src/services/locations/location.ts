@@ -1,6 +1,7 @@
 import { Op } from 'sequelize';
 import { Location, LocationAttributes } from '../../models/locations/location';
 import axios from 'axios';
+import { WhereOptions } from 'sequelize';
 class LocationService {
 
     async create(locationData: LocationAttributes): Promise<Location> {
@@ -25,7 +26,7 @@ class LocationService {
 
     async getAll(rating?: number): Promise<Location[]> {
         try {
-            let whereCondition: any = {};
+            let whereCondition: WhereOptions = {};
 
             if (rating) {
                 whereCondition.rating = { [Op.gte]: rating };
@@ -91,25 +92,28 @@ class LocationService {
     }
 
 
-    async update(id: number, locationData: any): Promise<Location> {
+    async update(id: string, locationData: Partial<LocationAttributes>): Promise<Location> {
         try {
-            const [, updatedRowsCount]: [any, any] = await Location.update(locationData, {
+            const [affectedRowsCount, updatedRows]: [number, Location[]] = await Location.update(locationData, {
                 where: { id },
                 returning: true,
             });
-
-            if (updatedRowsCount === 0) {
+    
+            if (affectedRowsCount === 0) {
                 throw new Error('Location not found');
             }
-            const updatedLocation = await Location.findOne({ where: { id } });
+    
+            const updatedLocation = updatedRows[0];
             if (!updatedLocation) {
                 throw new Error('Updated location not found');
             }
+    
             return updatedLocation;
         } catch (error) {
             throw error;
         }
     }
+    
 
     async delete(id: number): Promise<number> {
         try {

@@ -1,7 +1,7 @@
 import { UserActivity } from "../../models/users-activities/user_activity";
 class UserActivityService {
 
-    async create(data: any): Promise<UserActivity> {
+    async create(data: Partial<UserActivity>): Promise<UserActivity> {
         try {
             const userActivity = await UserActivity.create(data);
             return userActivity;

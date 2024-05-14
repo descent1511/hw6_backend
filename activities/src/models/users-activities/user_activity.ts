@@ -4,7 +4,13 @@ import { Optional } from "sequelize";
 
 export interface UserActivityAttributes {
   id: string;
-  name: string;
+  activityId: string;
+  userId: string;
+}
+
+export interface CreateUserActivityData {
+  activityId: string;
+  userId: string;
 }
 
 export type UserActivityCreationAttributes = Optional<UserActivityAttributes, 'id'>;
