@@ -46,7 +46,7 @@ export class Review extends Model<ReviewAttributes, ReviewCreationAttributes> {
   static async updateLocationRating(instance: Review) {
     try {
       // Fetch location data
-      const response = await axios.get(`http://localhost:8000/locations/v1/location`, {
+      const response = await axios.post(`http://location:8006/v1/location`, {
         data: {
           id: instance.location_id,
         },
@@ -64,8 +64,7 @@ export class Review extends Model<ReviewAttributes, ReviewCreationAttributes> {
         const averageRating = totalRating / reviews.length;
         const roundedRating = Math.round(averageRating);
 
-        // Update location rating
-        await axios.put(`http://localhost:8000/locations/v1/update-location`, {
+        await axios.put(`http://location:8006/v1/update-location`, {
           id: instance.location_id,
           rating: roundedRating,
         });
