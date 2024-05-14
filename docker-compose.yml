@@ -17,6 +17,108 @@ services:
       - db
     restart: always
 
+  activity:
+    build:
+      context: ./activities
+      dockerfile: Dockerfile
+    ports:
+      - "8003:8003"
+    environment:
+      DB_USER: ${DB_USER}
+      DB_NAME: ${DB_NAME}
+      DB_PASS: ${DB_PASS}
+      SECRET_KEY : ${SECRET_KEY}
+      DB_HOST: "db"
+    depends_on:
+      - db
+      - auth
+    restart: always
+
+  location:
+    build:
+      context: ./locations
+      dockerfile: Dockerfile
+    ports:
+      - "8006:8006"
+    environment:
+      DB_USER: ${DB_USER}
+      DB_NAME: ${DB_NAME}
+      DB_PASS: ${DB_PASS}
+      SECRET_KEY : ${SECRET_KEY}
+      DB_HOST: "db"
+    depends_on:
+      - db
+      - auth
+      - activity
+    restart: always
+  
+  offer:
+    build:
+      context: ./offers
+      dockerfile: Dockerfile
+    ports:
+      - "8009:8009"
+    environment:
+      DB_USER: ${DB_USER}
+      DB_NAME: ${DB_NAME}
+      DB_PASS: ${DB_PASS}
+      SECRET_KEY : ${SECRET_KEY}
+      DB_HOST: "db"
+    depends_on:
+      - db
+      - auth
+      - location
+    restart: always
+  
+  trip:
+    build:
+      context: ./trips
+      dockerfile: Dockerfile
+    ports:
+      - "8002:8002"
+    environment:
+      DB_USER: ${DB_USER}
+      DB_NAME: ${DB_NAME}
+      DB_PASS: ${DB_PASS}
+      SECRET_KEY : ${SECRET_KEY}
+      DB_HOST: "db"
+    depends_on:
+      - db
+      - auth
+    restart: always
+
+  review:
+    build:
+      context: ./reviews
+      dockerfile: Dockerfile
+    ports:
+      - "8005:8005"
+    environment:
+      DB_USER: ${DB_USER}
+      DB_NAME: ${DB_NAME}
+      DB_PASS: ${DB_PASS}
+      SECRET_KEY : ${SECRET_KEY}
+      DB_HOST: "db"
+    depends_on:
+      - db
+      - location
+    restart: always
+
+  gateway:
+    build:
+      context: ./gateway
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    depends_on:
+      - trip
+      - location
+      - auth
+      - offer
+      - activity
+      - review
+    restart: always
+
   db:
     image: postgres:latest
     ports:

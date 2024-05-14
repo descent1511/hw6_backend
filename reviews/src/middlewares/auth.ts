@@ -23,7 +23,7 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
 
     const decoded = jwt.verify(token, SECRET_KEY) as JwtPayload;
     console.log(decoded.id)
-    const userData = await axios.post('http://localhost:8001/v1/users/user', {
+    const userData = await axios.post('http://auth:8001/v1/users/user', {
       id: decoded.id
     });
 
