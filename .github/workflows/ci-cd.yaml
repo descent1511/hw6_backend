@@ -27,10 +27,6 @@ jobs:
       run: |
         ssh -o StrictHostKeyChecking=no ${{ env.VPS_USER_NAME }}@${{ env.VPS_SERVER_NAME }} "
         mkdir -p /home/${{ env.VPS_USER_NAME }}/deployed_project &&
-        cd /home/${{ env.VPS_USER_NAME }}/deployed_project &&
-        if [ ! -d .git ]; then
-          git init &&
-          git remote add origin https://${{ env.GIT_USERNAME }}:${{ env.GIT_PASSWORD }}@github.com/${{ env.GIT_USERNAME }}/hw6_backend.git;
-        fi &&
+        cd /home/ubuntu/project/hw6_backend &&
         git pull origin main &&
         echo 'Deployment completed!'"
