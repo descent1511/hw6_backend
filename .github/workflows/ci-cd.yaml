@@ -27,6 +27,6 @@ jobs:
         mkdir -p /home/$VPS_USER_NAME/deployed_project &&
         cd /home/$VPS_USER_NAME/deployed_project &&
         git init &&
-        git remote add origin https://github.com/your_username/your_repository.git &&
+        git remote add origin https://github.com/descent1511/hw6_backend &&
         git pull origin main &&
         echo 'Deployment completed!'"
